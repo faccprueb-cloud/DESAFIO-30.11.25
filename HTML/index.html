@@ -4,12 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Autenticación</title>
+    <!-- Enlace a la carpeta CSS en mayúsculas debido a que cree las carpetas asi -->
     <link rel="stylesheet" href="../CSS/estilos.css">
 </head>
 <body>
 
     <div class="contenedor">
         
+        <!-- SECCIÓN REGISTRO -->
         <section id="sec-registro" class="seccion activa">
             <h2>Crear Cuenta</h2>
             <form onsubmit="return false;">
@@ -20,11 +22,11 @@
                 <input type="text" id="regEmail" placeholder="ejemplo@correo.com">
                 
                 <label>Número de Móvil:</label>
-                <input type="text" id="regMovil" placeholder="Sólo números">
+                <input type="text" id="regMovil" placeholder="Sólo números (7-12 dígitos)">
                 
                 <div class="password-container">
                     <label>Contraseña:</label>
-                    <input type="password" id="regPass" placeholder="Contraseña segura">
+                    <input type="password" id="regPass" placeholder="Segura: Mayús, minús, núm, símbolo">
                     <span class="toggle-pass" onclick="togglePassword('regPass')">👁️</span>
                 </div>
 
@@ -35,6 +37,7 @@
             </form>
         </section>
 
+        <!-- SECCIÓN LOGIN -->
         <section id="sec-login" class="seccion">
             <h2>Iniciar Sesión</h2>
             <form onsubmit="return false;">
@@ -57,6 +60,7 @@
             </form>
         </section>
 
+        <!-- SECCIÓN RECUPERACIÓN -->
         <section id="sec-recuperar" class="seccion">
             <h2>Recuperar Contraseña</h2>
             <p style="font-size: 0.9rem; color: #ccc; text-align: center;">Ingresa tu correo y define una nueva contraseña.</p>
@@ -77,6 +81,7 @@
             <button class="secondary" onclick="mostrarSeccion('sec-login')">Volver al Login</button>
         </section>
 
+        <!-- SECCIÓN BIENVENIDA -->
         <section id="sec-bienvenida" class="seccion">
             <h2 id="tituloBienvenida">¡Bienvenido!</h2>
             <p style="text-align: center;">Has ingresado correctamente al sistema.</p>
@@ -86,6 +91,7 @@
 
     </div>
 
+    <!-- Enlace a la carpeta JS en mayúsculas debido a q así cree las carpetas -->
     <script src="../JS/main.js"></script>
 </body>
 </html>
