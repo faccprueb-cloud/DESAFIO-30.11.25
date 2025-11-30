@@ -1,26 +1,31 @@
+/* --- CONFIGURACIÓN GENERAL DEL CUERPO --- */
 body {
-    font-family: Arial, sans-serif; /* CAMBIO: Fuente simple (Arial) */
-    background-color: #121212;
-    color: #e0e0e0;
+    font-family: Arial, sans-serif; /* Fuente simple y legible */
+    background-color: #121212;      /* Fondo oscuro para contraste */
+    color: #e0e0e0;                 /* Texto claro */
+    
+    /* Centrado del formulario usando Flexbox */
     display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
+    justify-content: center; /* Centrado horizontal */
+    align-items: center;     /* Centrado vertical */
+    min-height: 100vh;       /* Altura mínima de toda la ventana */
     margin: 0;
 }
 
+/* --- CONTENEDOR PRINCIPAL (TARJETA) --- */
 .contenedor {
     background-color: #1e1e1e;
     padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;        /* Bordes redondeados */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); /* Sombra suave */
     width: 100%;
-    max-width: 400px;
+    max-width: 400px;           /* Ancho máximo para móviles y PC */
 }
 
+/* --- TIPOGRAFÍA Y TÍTULOS --- */
 h2 {
     text-align: center;
-    color: #1565c0; /* Azul Marino */
+    color: #1565c0; /* Azul Marino Principal */
     margin-bottom: 20px;
 }
 
@@ -31,41 +36,43 @@ label {
     color: #aaa;
 }
 
+/* --- CAMPOS DE TEXTO (INPUTS) --- */
 input {
     width: 100%;
     padding: 10px;
     margin-top: 5px;
     border-radius: 5px;
     border: 1px solid #333;
-    background-color: #2c2c2c;
+    background-color: #2c2c2c; /* Fondo gris oscuro */
     color: white;
-    box-sizing: border-box;
+    box-sizing: border-box;    /* Evita que el padding rompa el ancho */
 }
 
 input:focus {
     outline: none;
-    border-color: #1565c0; /* Borde Azul al escribir */
+    border-color: #1565c0; /* Resaltado azul al escribir */
 }
 
+/* --- BOTONES --- */
 button {
     width: 100%;
     padding: 12px;
     margin-top: 20px;
-    background-color: #1565c0; /* Botón Azul Marino */
+    background-color: #1565c0; /* Azul Marino */
     color: white;
     border: none;
     border-radius: 5px;
     font-size: 1rem;
     cursor: pointer;
-    transition: background 0.3s;
+    transition: background 0.3s; /* Efecto suave al pasar el mouse */
 }
 
 button:hover {
-    background-color: #0d47a1; /* Azul más oscuro al pasar el mouse */
+    background-color: #0d47a1; /* Azul más oscuro (interacción) */
 }
 
 button.secondary {
-    background-color: #444;
+    background-color: #444; /* Botón gris para acciones secundarias */
     margin-top: 10px;
 }
 
@@ -73,29 +80,32 @@ button.secondary:hover {
     background-color: #555;
 }
 
+/* --- MENSAJES DE ESTADO --- */
 .mensaje-error {
-    color: #ff5252;
+    color: #ff5252; /* Rojo suave */
     font-size: 0.85rem;
     margin-top: 5px;
     min-height: 20px;
 }
 
 .mensaje-exito {
-    color: #1565c0; /* Mensaje de éxito Azul */
+    color: #1565c0; /* Azul */
     font-size: 0.85rem;
     margin-top: 5px;
     text-align: center;
 }
 
+/* --- ENLACES Y NAVEGACIÓN --- */
 .link {
     text-align: center;
     margin-top: 15px;
     font-size: 0.9rem;
     cursor: pointer;
-    color: #1565c0; /* Enlaces Azules */
+    color: #1565c0;
     text-decoration: underline;
 }
 
+/* --- UTILIDAD PARA VER CONTRASEÑA --- */
 .password-container {
     position: relative;
 }
@@ -103,18 +113,19 @@ button.secondary:hover {
 .toggle-pass {
     position: absolute;
     right: 10px;
-    top: 35px;
+    top: 35px; /* Ajuste para alinear con el input */
     cursor: pointer;
     font-size: 1.2rem;
     user-select: none;
 }
 
+/* --- CLASES DE VISIBILIDAD (SPA) --- */
 .seccion {
-    display: none;
+    display: none; /* Oculta todas las secciones por defecto */
 }
 
 .activa {
-    display: block;
+    display: block; /* Muestra solo la sección actual */
 }
 
 
