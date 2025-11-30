@@ -1,5 +1,5 @@
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: Arial, sans-serif; /* CAMBIO: Fuente simple (Arial) */
     background-color: #121212;
     color: #e0e0e0;
     display: flex;
@@ -20,7 +20,7 @@ body {
 
 h2 {
     text-align: center;
-    color: #4caf50;
+    color: #1565c0; /* Azul Marino */
     margin-bottom: 20px;
 }
 
@@ -44,14 +44,14 @@ input {
 
 input:focus {
     outline: none;
-    border-color: #4caf50;
+    border-color: #1565c0; /* Borde Azul al escribir */
 }
 
 button {
     width: 100%;
     padding: 12px;
     margin-top: 20px;
-    background-color: #4caf50;
+    background-color: #1565c0; /* Botón Azul Marino */
     color: white;
     border: none;
     border-radius: 5px;
@@ -61,7 +61,7 @@ button {
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: #0d47a1; /* Azul más oscuro al pasar el mouse */
 }
 
 button.secondary {
@@ -81,7 +81,7 @@ button.secondary:hover {
 }
 
 .mensaje-exito {
-    color: #4caf50;
+    color: #1565c0; /* Mensaje de éxito Azul */
     font-size: 0.85rem;
     margin-top: 5px;
     text-align: center;
@@ -92,7 +92,7 @@ button.secondary:hover {
     margin-top: 15px;
     font-size: 0.9rem;
     cursor: pointer;
-    color: #4caf50;
+    color: #1565c0; /* Enlaces Azules */
     text-decoration: underline;
 }
 
@@ -116,4 +116,5 @@ button.secondary:hover {
 .activa {
     display: block;
 }
+
 
