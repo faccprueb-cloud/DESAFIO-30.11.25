@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Autenticación</title>
+    <link rel="stylesheet" href="../css/estilos.css">
+</head>
+<body>
+
+    <div class="contenedor">
+        
+        <section id="sec-registro" class="seccion activa">
+            <h2>Crear Cuenta</h2>
+            <form onsubmit="return false;">
+                <label>Nombre Completo:</label>
+                <input type="text" id="regNombre" placeholder="Tu nombre completo">
+                
+                <label>Usuario (Correo Electrónico):</label>
+                <input type="text" id="regEmail" placeholder="ejemplo@correo.com">
+                
+                <label>Número de Móvil:</label>
+                <input type="text" id="regMovil" placeholder="Sólo números">
+                
+                <div class="password-container">
+                    <label>Contraseña:</label>
+                    <input type="password" id="regPass" placeholder="Contraseña segura">
+                    <span class="toggle-pass" onclick="togglePassword('regPass')">👁️</span>
+                </div>
+
+                <p id="errorRegistro" class="mensaje-error"></p>
+
+                <button onclick="registrarUsuario()">Registrarse</button>
+                <p class="link" onclick="mostrarSeccion('sec-login')">¿Ya tienes cuenta? Inicia sesión</p>
+            </form>
+        </section>
+
+        <section id="sec-login" class="seccion">
+            <h2>Iniciar Sesión</h2>
+            <form onsubmit="return false;">
+                <label>Usuario (Correo):</label>
+                <input type="text" id="loginEmail">
+                
+                <div class="password-container">
+                    <label>Contraseña:</label>
+                    <input type="password" id="loginPass">
+                    <span class="toggle-pass" onclick="togglePassword('loginPass')">👁️</span>
+                </div>
+
+                <p id="errorLogin" class="mensaje-error"></p>
+
+                <button id="btnLogin" onclick="iniciarSesion()">Ingresar</button>
+                
+                <p id="linkRecuperar" class="link" style="display: none; color: #ff5252;" onclick="mostrarSeccion('sec-recuperar')">Recuperar contraseña</p>
+                
+                <p class="link" onclick="mostrarSeccion('sec-registro')">Crear cuenta nueva</p>
+            </form>
+        </section>
+
+        <section id="sec-recuperar" class="seccion">
+            <h2>Recuperar Contraseña</h2>
+            <p style="font-size: 0.9rem; color: #ccc; text-align: center;">Ingresa tu correo y define una nueva contraseña.</p>
+            
+            <label>Correo Registrado:</label>
+            <input type="text" id="recEmail">
+
+            <div class="password-container">
+                <label>Nueva Contraseña:</label>
+                <input type="password" id="recPassNew" placeholder="Nueva contraseña segura">
+                <span class="toggle-pass" onclick="togglePassword('recPassNew')">👁️</span>
+            </div>
+
+            <p id="errorRecuperar" class="mensaje-error"></p>
+            <p id="exitoRecuperar" class="mensaje-exito"></p>
+
+            <button onclick="actualizarPassword()">Actualizar Contraseña</button>
+            <button class="secondary" onclick="mostrarSeccion('sec-login')">Volver al Login</button>
+        </section>
+
+        <section id="sec-bienvenida" class="seccion">
+            <h2 id="tituloBienvenida">¡Bienvenido!</h2>
+            <p style="text-align: center;">Has ingresado correctamente al sistema.</p>
+            <div style="text-align: center; font-size: 3rem; margin: 20px;">🎉</div>
+            <button class="secondary" onclick="cerrarSesion()">Cerrar Sesión</button>
+        </section>
+
+    </div>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>
+
+
