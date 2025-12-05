@@ -1,23 +1,25 @@
-// Base de datos local (arreglo de objetos)
+// Aquí voy a guardar a los usuarios en memoria mientras la página esté abierta
 let usuarios = [];
 
-/* --- PUNTO B: EXPLICACIÓN DE EXPRESIONES REGULARES ---
-   1. regexNombre: Solo permite letras (mayúsculas/minúsculas) y espacios.
-   2. regexEmail: Valida formato estándar (texto + @ + texto + . + extensión).
-   3. regexPass: Contraseña segura obligatoria:
-      - (?=.*[a-z]): Al menos una minúscula
-      - (?=.*[A-Z]): Al menos una mayúscula
-      - (?=.*\d): Al menos un número
-      - (?=.*[\W_]): Al menos un símbolo
-      - .{6,}: Mínimo 6 caracteres de longitud
-   4. regexMovil: Solo números, entre 7 y 12 dígitos.
+/*
+   Explicación sencilla de las expresiones regulares:
+
+   regexNombre: solo permite letras (mayúsculas, minúsculas) y espacios.
+   regexEmail: revisa que tenga texto + @ + texto + . + algo (ej: .com, .es).
+   regexPass: obliga a que la contraseña tenga:
+       - una letra minúscula
+       - una letra mayúscula
+       - un número
+       - un símbolo
+       - mínimo 6 caracteres
+   regexMovil: solo números, entre 7 y 12 dígitos.
 */
 const regexNombre = /^[A-Za-zÁÉÍÓÚÑáéíóúñ ]+$/;
 const regexEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const regexPass = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{6,}$/;
 const regexMovil = /^[0-9]{7,12}$/;
 
-// Función auxiliar para navegación
+// Esta función cambia de "pantalla" (registro, login, recuperar, bienvenida)
 function mostrarSeccion(idSeccion) {
     let secciones = document.querySelectorAll('.seccion');
     for (let i = 0; i < secciones.length; i++) {
@@ -25,14 +27,14 @@ function mostrarSeccion(idSeccion) {
     }
     document.getElementById(idSeccion).classList.add('activa');
 
-    // Limpiar mensajes
+    // Aquí borro los mensajes para que no queden viejos
     document.getElementById('errorRegistro').innerText = "";
     document.getElementById('errorLogin').innerText = "";
     document.getElementById('errorRecuperar').innerText = "";
     document.getElementById('exitoRecuperar').innerText = "";
 }
 
-// Función auxiliar para ver contraseña
+// Esta función sirve para mostrar / ocultar la contraseña
 function togglePassword(idInput) {
     let input = document.getElementById(idInput);
     if (input.type === "password") {
@@ -42,7 +44,7 @@ function togglePassword(idInput) {
     }
 }
 
-// --- MÓDULO REGISTRO ---
+// ----------------- REGISTRO -----------------
 function registrarUsuario() {
     let nombre = document.getElementById('regNombre').value;
     let email = document.getElementById('regEmail').value;
@@ -50,9 +52,9 @@ function registrarUsuario() {
     let pass = document.getElementById('regPass').value;
     let errorMsg = document.getElementById('errorRegistro');
 
-    // Validación con REGEX (Punto B: Validación de entrada)
+    // Aquí reviso que los datos cumplan las reglas de arriba (regex)
     if (!regexNombre.test(nombre)) {
-        errorMsg.innerText = "Nombre inválido (solo letras).";
+        errorMsg.innerText = "Nombre inválido (solo letras y espacios).";
         return;
     }
     if (!regexEmail.test(email)) {
@@ -64,11 +66,11 @@ function registrarUsuario() {
         return;
     }
     if (!regexPass.test(pass)) {
-        errorMsg.innerText = "Contraseña insegura: Requisitos no cumplidos.";
+        errorMsg.innerText = "Contraseña insegura: revisa los requisitos.";
         return;
     }
 
-    // Verificar duplicados
+    // Aquí reviso que el correo no esté repetido
     for (let i = 0; i < usuarios.length; i++) {
         if (usuarios[i].email === email) {
             errorMsg.innerText = "El correo ya está registrado.";
@@ -76,9 +78,10 @@ function registrarUsuario() {
         }
     }
 
-    /* Creación del Objeto Usuario con propiedades para bloqueo
-       intentosFallidos: contador de errores
-       bloqueado: estado de la cuenta
+    /*
+       Creo un "usuario" como un objeto simple con estos datos.
+       intentosFallidos: cuenta cuántas veces se equivocó al entrar.
+       bloqueado: indica si ya se bloqueó por 3 intentos fallidos.
     */
     let nuevoUsuario = {
         nombre: nombre,
@@ -89,26 +92,29 @@ function registrarUsuario() {
         bloqueado: false
     };
 
+    // Guardo el nuevo usuario en el arreglo
     usuarios.push(nuevoUsuario);
 
     alert("Registro exitoso. Ahora inicia sesión.");
-    
-    // Limpiar formulario
+
+    // Limpio los campos después de registrar
     document.getElementById('regNombre').value = "";
     document.getElementById('regEmail').value = "";
     document.getElementById('regMovil').value = "";
     document.getElementById('regPass').value = "";
+
+    // Me voy a la pantalla de login
     mostrarSeccion('sec-login');
 }
 
-// --- MÓDULO LOGIN Y PUNTO B: MANEJO DEL BLOQUEO ---
+// ----------------- LOGIN (INICIAR SESIÓN) -----------------
 function iniciarSesion() {
     let email = document.getElementById('loginEmail').value;
     let pass = document.getElementById('loginPass').value;
     let errorMsg = document.getElementById('errorLogin');
     let usuarioEncontrado = null;
 
-    // Búsqueda del usuario
+// Aquí busco el usuario en el arreglo por su correo
     for (let i = 0; i < usuarios.length; i++) {
         if (usuarios[i].email === email) {
             usuarioEncontrado = usuarios[i];
@@ -116,44 +122,55 @@ function iniciarSesion() {
         }
     }
 
-    /* PUNTO B: CÓMO SE VALIDA LA CONTRASEÑA Y EL BLOQUEO
-       1. Primero verificamos si el usuario existe.
-       2. Si existe, verificamos si ya está BLOQUEADO (usuarioEncontrado.bloqueado).
-       3. Si no está bloqueado, comparamos la contraseña.
-       4. Si la contraseña falla, incrementamos intentosFallidos.
-       5. Si intentosFallidos llega a 3, bloqueamos la cuenta.
+    /*
+       Explicación de cómo funciona el bloqueo y la validación:
+
+       1. Primero veo si el usuario existe.
+       2. Si no existe, muestro un mensaje invitando a registrarse.
+       3. Si existe, reviso si ya está bloqueado.
+       4. Si no está bloqueado, comparo la contraseña.
+       5. Si la contraseña está mal, sumo 1 al contador de intentos.
+       6. Si llega a 3 intentos, marco la cuenta como bloqueada.
     */
-    if (usuarioEncontrado) {
-        // Chequeo de bloqueo previo
-        if (usuarioEncontrado.bloqueado) {
+
+    // Caso: el correo no está registrado
+    if (!usuarioEncontrado) {
+        errorMsg.innerText = "Este correo no está registrado. Por favor, crea una cuenta nueva en la opción 'Crear cuenta nueva'.";
+        return;
+    }
+
+    // Caso: el usuario existe pero ya está bloqueado
+    if (usuarioEncontrado.bloqueado) {
+        errorMsg.innerText = "Cuenta bloqueada por intentos fallidos.";
+        document.getElementById('linkRecuperar').style.display = 'block';
+        return;
+    }
+
+    // Aquí reviso si la contraseña es correcta
+    if (usuarioEncontrado.pass === pass) {
+        // Como entró bien, reinicio los intentos
+        usuarioEncontrado.intentosFallidos = 0;
+        document.getElementById('tituloBienvenida').innerText =
+            "Bienvenido al sistema, " + usuarioEncontrado.nombre;
+        mostrarSeccion('sec-bienvenida');
+    } else {
+        // Contraseña incorrecta -> sumo un intento fallido
+        usuarioEncontrado.intentosFallidos++;
+
+        // Si ya van 3 o más intentos, bloqueo la cuenta
+        if (usuarioEncontrado.intentosFallidos >= 3) {
+            usuarioEncontrado.bloqueado = true;
             errorMsg.innerText = "Cuenta bloqueada por intentos fallidos.";
             document.getElementById('linkRecuperar').style.display = 'block';
-            return;
-        }
-
-        // Validación de contraseña
-        if (usuarioEncontrado.pass === pass) {
-            usuarioEncontrado.intentosFallidos = 0; // Resetear intentos al entrar bien
-            document.getElementById('tituloBienvenida').innerText = "Bienvenido al sistema, " + usuarioEncontrado.nombre;
-            mostrarSeccion('sec-bienvenida');
         } else {
-            // Contraseña incorrecta -> Aumentar contador
-            usuarioEncontrado.intentosFallidos++;
-            
-            if (usuarioEncontrado.intentosFallidos >= 3) {
-                usuarioEncontrado.bloqueado = true; // ACTIVAR BLOQUEO
-                errorMsg.innerText = "Cuenta bloqueada por intentos fallidos.";
-                document.getElementById('linkRecuperar').style.display = 'block';
-            } else {
-                errorMsg.innerText = "Usuario o contraseña incorrectos. Intento " + usuarioEncontrado.intentosFallidos + " de 3.";
-            }
+            // Mensaje normal de error con el número de intento
+            errorMsg.innerText = "Usuario o contraseña incorrectos. Intento " +
+                usuarioEncontrado.intentosFallidos + " de 3.";
         }
-    } else {
-        errorMsg.innerText = "Usuario o contraseña incorrectos.";
     }
 }
 
-// --- MÓDULO RECUPERACIÓN Y PUNTO B: ACTUALIZACIÓN DE CONTRASEÑA ---
+// ----------------- RECUPERAR / CAMBIAR CONTRASEÑA -----------------
 function actualizarPassword() {
     let email = document.getElementById('recEmail').value;
     let nuevaPass = document.getElementById('recPassNew').value;
@@ -161,6 +178,7 @@ function actualizarPassword() {
     let exitoMsg = document.getElementById('exitoRecuperar');
     let usuarioEncontrado = null;
 
+    // Busco el usuario por correo
     for (let i = 0; i < usuarios.length; i++) {
         if (usuarios[i].email === email) {
             usuarioEncontrado = usuarios[i];
@@ -168,34 +186,35 @@ function actualizarPassword() {
         }
     }
 
-    if (usuarioEncontrado) {
-        // Validar nueva contraseña con Regex
-        if (!regexPass.test(nuevaPass)) {
-            errorMsg.innerText = "La nueva contraseña no cumple los requisitos.";
-            return;
-        }
-
-        /* PUNTO B: CÓMO SE ACTUALIZA LA CONTRASEÑA OLVIDADA
-           - Se sobrescribe la propiedad .pass del objeto.
-           - Se establece .bloqueado en false (desbloquear).
-           - Se reinicia el contador de intentos a 0.
-        */
-        usuarioEncontrado.pass = nuevaPass;
-        usuarioEncontrado.bloqueado = false;
-        usuarioEncontrado.intentosFallidos = 0;
-
-        errorMsg.innerText = "";
-        exitoMsg.innerText = "Contraseña actualizada. Ahora puede iniciar sesión.";
-        document.getElementById('recPassNew').value = "";
-    } else {
+    if (!usuarioEncontrado) {
         errorMsg.innerText = "El correo no existe en nuestros registros.";
+        return;
     }
+
+    // Revisar que la nueva contraseña también cumpla la regla (regexPass)
+    if (!regexPass.test(nuevaPass)) {
+        errorMsg.innerText = "La nueva contraseña no cumple los requisitos.";
+        return;
+    }
+
+    /*
+       Aquí actualizo la contraseña olvidada:
+       - cambio la propiedad pass del usuario
+       - desbloqueo la cuenta (bloqueado = false)
+       - pongo los intentos en 0 otra vez
+    */
+    usuarioEncontrado.pass = nuevaPass;
+    usuarioEncontrado.bloqueado = false;
+    usuarioEncontrado.intentosFallidos = 0;
+
+    errorMsg.innerText = "";
+    exitoMsg.innerText = "Contraseña actualizada. Ahora puede iniciar sesión.";
+    document.getElementById('recPassNew').value = "";
 }
 
+// Esta función solo limpia el login y vuelve a la pantalla de inicio de sesión
 function cerrarSesion() {
     document.getElementById('loginEmail').value = "";
     document.getElementById('loginPass').value = "";
     mostrarSeccion('sec-login');
-}
-
-
+               }
